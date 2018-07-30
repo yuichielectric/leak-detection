@@ -19,16 +19,19 @@ package uk.gov.hmrc.leakdetection.controllers
 import com.google.inject.Inject
 import javax.inject.Singleton
 import play.api.libs.json.Json
-import play.api.mvc.Action
+import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.leakdetection.config.ConfigLoader
 import uk.gov.hmrc.leakdetection.model.ReportId
 import uk.gov.hmrc.leakdetection.services.ReportsService
 import uk.gov.hmrc.leakdetection.views.html
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext.fromLoggingDetails
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 @Singleton
-class ReportsController @Inject()(configLoader: ConfigLoader, reportsService: ReportsService) extends BaseController {
+class ReportsController @Inject()(
+  val controllerComponents: ControllerComponents,
+  configLoader: ConfigLoader,
+  reportsService: ReportsService)
+    extends BackendController {
 
   def repositories = Action.async { implicit request =>
     reportsService.getRepositories.map { repoNames =>

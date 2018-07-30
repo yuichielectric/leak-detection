@@ -43,7 +43,8 @@ class GithubRequestsQueueRepository @Inject()(
     extends WorkItemRepository[PayloadDetails, BSONObjectID](
       "githubRequestsQueue",
       reactiveMongoComponent.mongoConnector.db,
-      MongoPayloadDetailsFormats.formats
+      MongoPayloadDetailsFormats.formats,
+      configuration.underlying
     ) {
   override def now: DateTime = DateTimeUtils.now
 

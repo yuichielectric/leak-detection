@@ -25,6 +25,7 @@ import org.scalatest.{Matchers, WordSpec}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
+import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -56,7 +57,10 @@ class SlackNotificationsConnectorSpec extends WordSpec with Matchers with Mockit
           "microservice.services.slack-notifications.port" -> 80
         )
 
-      val connector = new SlackNotificationsConnector(httpClient, configuration, Environment.simple())
+      val runMode        = new RunMode(configuration, Environment.simple().mode)
+      val servicesConfig = new ServicesConfig(configuration, runMode)
+
+      val connector = new SlackNotificationsConnector(httpClient, servicesConfig, configuration)
 
       val slackMessage =
         SlackNotificationRequest(

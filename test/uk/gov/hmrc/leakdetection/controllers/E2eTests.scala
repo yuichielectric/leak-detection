@@ -22,6 +22,7 @@ import org.apache.commons.codec.digest.HmacUtils
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.{BeforeAndAfterEach, FeatureSpec, GivenWhenThen, Matchers, TestData}
 import org.scalatestplus.play.OneAppPerTest
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -44,7 +45,7 @@ class E2eTests
     extends FeatureSpec
     with GivenWhenThen
     with Matchers
-    with OneAppPerTest
+    with GuiceOneAppPerTest
     with MongoSpecSupport
     with ScalaFutures
     with BeforeAndAfterEach
@@ -212,6 +213,8 @@ class E2eTests
                 initialDelay = 5 millis
                 interval = 1 seconds
               }
+
+              queue.retryAfter = 10000
             """
           ))
       )

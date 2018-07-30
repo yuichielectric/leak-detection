@@ -17,13 +17,12 @@
 package uk.gov.hmrc.leakdetection.connectors
 
 import java.time.LocalDateTime
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
-import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.config.ServicesConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,17 +42,11 @@ object Team {
 }
 
 @Singleton
-class TeamsAndRepositoriesConnector @Inject()(
-  http: HttpClient,
-  override val runModeConfiguration: Configuration,
-  environment: Environment)
-    extends ServicesConfig {
-
-  override protected def mode = environment.mode
+class TeamsAndRepositoriesConnector @Inject()(http: HttpClient, servicesConfig: ServicesConfig) {
 
   def teamsWithRepositories()(implicit ec: ExecutionContext): Future[Seq[Team]] = {
     implicit val hc = HeaderCarrier()
-    http.GET[Seq[Team]](s"${baseUrl("teams-and-repositories")}/api/teams_with_repositories")
+    http.GET[Seq[Team]](s"${servicesConfig.baseUrl("teams-and-repositories")}/api/teams_with_repositories")
   }
 
 }

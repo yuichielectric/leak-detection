@@ -26,6 +26,7 @@ import play.api.test.{FakeRequest, Helpers}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.leakdetection.services.ReportsService
+import play.api.test.Helpers.stubControllerComponents
 
 class ReportsControllerSpec extends WordSpec with Matchers with MockitoSugar {
 
@@ -35,7 +36,7 @@ class ReportsControllerSpec extends WordSpec with Matchers with MockitoSugar {
 
     "be in json if 'application/json' Accept header was sent" in {
       val mockedReportsService = mock[ReportsService]
-      val controller           = new ReportsController(null, mockedReportsService)
+      val controller           = new ReportsController(stubControllerComponents(), null, mockedReportsService)
       val request              = FakeRequest().withHeaders("Accept" -> "application/json")
       val repos                = List("repo1", "repo2")
       when(mockedReportsService.getRepositories).thenReturn(Future(repos))
@@ -49,7 +50,7 @@ class ReportsControllerSpec extends WordSpec with Matchers with MockitoSugar {
 
     "be in html if appropriate '*/*' Accept header was sent" in {
       val mockedReportsService = mock[ReportsService]
-      val controller           = new ReportsController(null, mockedReportsService)
+      val controller           = new ReportsController(stubControllerComponents(), null, mockedReportsService)
       val request              = FakeRequest().withHeaders("Accept" -> "*/*")
       val repos                = List("repo1", "repo2")
       when(mockedReportsService.getRepositories).thenReturn(Future(repos))

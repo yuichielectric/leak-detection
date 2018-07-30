@@ -22,23 +22,23 @@ import ammonite.ops.{Path, mkdir, tmp, write}
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.{Format, JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.leakdetection.config.{ConfigLoader, Rule}
 import uk.gov.hmrc.leakdetection.scanner.RegexMatchingEngine
 import uk.gov.hmrc.leakdetection.services.{ReportsService, ScanningService}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.{BackendController, BaseController}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 import scala.concurrent.Future
 
 @Singleton
 class AdminController @Inject()(
+  val controllerComponents: ControllerComponents,
   configLoader: ConfigLoader,
   scanningService: ScanningService,
   reportsService: ReportsService,
   httpClient: HttpClient)
-    extends BaseController {
+    extends BackendController {
 
   val logger = Logger(this.getClass.getName)
 

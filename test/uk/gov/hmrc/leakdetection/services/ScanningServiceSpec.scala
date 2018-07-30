@@ -370,7 +370,7 @@ class ScanningServiceSpec
 
     val artifactService = mock[ArtifactService]
     val reportsService  = mock[ReportsService]
-    val queue = new GithubRequestsQueueRepository(null, new ReactiveMongoComponent {
+    val queue = new GithubRequestsQueueRepository(Configuration(), new ReactiveMongoComponent {
       override def mongoConnector: MongoConnector = mongoConnectorForTest
     }) {
       override lazy val inProgressRetryAfter: Duration = Duration.standardHours(1)

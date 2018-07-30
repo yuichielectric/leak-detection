@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.leakdetection.model
 
-import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -46,7 +45,7 @@ object PayloadDetails {
       (__ \ "deleted").read[Boolean]
   )(PayloadDetails.apply _)
     .map(cleanBranchName)
-    .filter(ValidationError("Delete event is not valid"))(failIfDeleteBranchEvent)
+    .filter(JsonValidationError("Delete event is not valid"))(failIfDeleteBranchEvent)
 
   private def failIfDeleteBranchEvent(pd: PayloadDetails): Boolean = !pd.deleted
 
@@ -72,7 +71,7 @@ object DeleteBranchEvent {
       (__ \ "repository" \ "url").read[String]
   )(DeleteBranchEvent.apply _)
     .map(cleanBranchName)
-    .filter(ValidationError("Not a delete event"))(_.deleted)
+    .filter(JsonValidationError("Not a delete event"))(_.deleted)
 
   def cleanBranchName(deleteBranchEvent: DeleteBranchEvent): DeleteBranchEvent =
     deleteBranchEvent.copy(branchRef = deleteBranchEvent.branchRef.stripPrefix("refs/heads/"))
