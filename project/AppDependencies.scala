@@ -29,7 +29,28 @@ object AppDependencies {
     "uk.gov.hmrc"            %% "reactivemongo-test-26" % "0.3.0"             % Test,
     "org.scalatestplus.play" %% "scalatestplus-play"    % "3.1.2"             % Test,
     "org.scalacheck"         %% "scalacheck"            % "1.13.4"            % Test,
-    "com.github.tomakehurst" % "wiremock"               % "2.16.0"            % Test
+    "com.github.tomakehurst" % "wiremock"               % "2.18.0"            % Test
   )
+
+  // Fixes a transitive dependency clash between wiremock and scalatestplus-play
+  val overrides: Set[ModuleID] = {
+    val jettyFromWiremockVersion = "9.2.24.v20180105"
+    Set(
+      "org.eclipse.jetty"           % "jetty-client"       % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-continuation" % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-http"         % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-io"           % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-security"     % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-server"       % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-servlet"      % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-servlets"     % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-util"         % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-webapp"       % jettyFromWiremockVersion,
+      "org.eclipse.jetty"           % "jetty-xml"          % jettyFromWiremockVersion,
+      "org.eclipse.jetty.websocket" % "websocket-api"      % jettyFromWiremockVersion,
+      "org.eclipse.jetty.websocket" % "websocket-client"   % jettyFromWiremockVersion,
+      "org.eclipse.jetty.websocket" % "websocket-common"   % jettyFromWiremockVersion
+    )
+  }
 
 }
